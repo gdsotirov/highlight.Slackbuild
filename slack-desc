@@ -1,0 +1,11 @@
+highlight: Highlight (A syntax highlighter)
+highlight:
+highlight: Highlight converts source code to formatted text with syntax
+highlight: highlighting.
+highlight:   * Coloured output in HTML, XHTML, RTF, TeX, LaTeX and XML format
+highlight:   * Supports 120+ programming languages
+highlight:   * Includes 40 colour themes
+highlight:   * Platform independent
+highlight:   * Customizable and easy to use
+highlight:
+highlight: Packaged by Georgi D. Sotirov <gdsotirov@dir.bg>
