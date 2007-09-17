@@ -7,7 +7,7 @@
 . ../slack-package.conf
 
 NAME=highlight
-VERSION=2.6.3
+VERSION=2.6.4
 BUILD=1
 ARCH=${ARCH:-i486}
 
@@ -31,7 +31,7 @@ make CFLAGS="-DHL_DATA_DIR=\\\"\${HL_DATA_DIR}\\\" -Wall $SLKCFLAGS" || exit 1
 make DESTDIR=$PKG man_dir='${DESTDIR}/usr/man' install || exit 2
 
 bin_perms $PKG
-strip_bin $PKG
+( cd $PKG; strip_bin )
 create_docs $PKG $NAME-$VERSION
 
 mkdir -p $PKG/install
