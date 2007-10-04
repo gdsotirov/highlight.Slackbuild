@@ -7,7 +7,7 @@
 . ../slack-package.conf
 
 NAME=highlight
-VERSION=2.6.4
+VERSION=2.6.5
 BUILD=1
 ARCH=${ARCH:-i486}
 
