@@ -7,7 +7,7 @@
 . ../slack-package.conf
 
 NAME=highlight
-VERSION=2.6.14
+VERSION=2.7
 BUILD=1
 ARCH=${ARCH:-i486}
 
@@ -27,7 +27,7 @@ cd $SRC
 fix_source
 
 # Build & install
-make CFLAGS="-DHL_DATA_DIR=\\\"\${HL_DATA_DIR}\\\" -Wall $SLKCFLAGS" -j4 || exit 1
+make CFLAGS="-DHL_DATA_DIR=\\\"\${HL_DATA_DIR}\\\" -Wall $SLKCFLAGS" -j4 all || exit 1
 make DESTDIR=$PKG man_dir='${DESTDIR}/usr/man' install || exit 2
 
 bin_perms $PKG
