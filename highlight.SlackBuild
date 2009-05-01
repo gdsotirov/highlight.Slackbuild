@@ -8,7 +8,7 @@
 
 NAME=highlight
 VERSION=2.9
-BUILD=1
+BUILD=2
 ARCH=${ARCH:-i486}
 
 SRC=$TMP/$NAME-$VERSION
@@ -29,7 +29,7 @@ fix_source
 # Build & install
 make CFLAGS="-DHL_DATA_DIR=\\\"\${HL_DATA_DIR}\\\" -Wall $SLKCFLAGS" -j4 all || exit 1
 make DESTDIR=$PKG \
-     man_dir=/usr/man \
+     man_dir=/usr/man/man1 \
      doc_dir=/usr/doc/$NAME-$VERSION \
      install || exit 2
 
