@@ -7,7 +7,7 @@
 . ../slack-package.conf
 
 NAME=highlight
-VERSION=2.15
+VERSION=2.16
 BUILD=1
 ARCH=${ARCH:-i486}
 
@@ -40,6 +40,7 @@ fix_source
 
 # Build & install
 make CFLAGS="-DHL_DATA_DIR=\\\"\${HL_DATA_DIR}\\\" -Wall $SLKCFLAGS" -j4 all || exit 1
+# Requires higher QT version to compile
 make CFLAGS="-DHL_DATA_DIR=\\\"\${HL_DATA_DIR}\\\" -Wall $SLKCFLAGS" -j4 gui || exit 2
 make DESTDIR=$PKG \
      man_dir=/usr/man/man1 \
@@ -59,12 +60,12 @@ create_docs $PKG $NAME-$VERSION
 mkdir -p $PKG/install
 install -m 644 $CWD/slack-desc     $PKG/install/slack-desc
 install -m 644 $CWD/slack-required $PKG/install/slack-required
-install -m 644 $CWD/slack-suggests $PKG/install/slack-suggests
+#install -m 644 $CWD/slack-suggests $PKG/install/slack-suggests
 
 mkdir -p $PKG/usr/src/slackbuilds/$NAME-$VERSION
 install -m 644 $CWD/slack-desc       $PKG/usr/src/slackbuilds/$NAME-$VERSION/slack-desc
 install -m 644 $CWD/slack-required   $PKG/usr/src/slackbuilds/$NAME-$VERSION/slack-required
-install -m 644 $CWD/slack-suggests   $PKG/usr/src/slackbuilds/$NAME-$VERSION/slack-suggests
+#install -m 644 $CWD/slack-suggests   $PKG/usr/src/slackbuilds/$NAME-$VERSION/slack-suggests
 install -m 644 $CWD/$NAME.SlackBuild $PKG/usr/src/slackbuilds/$NAME-$VERSION/$NAME.SlackBuild
 
 # Pack
