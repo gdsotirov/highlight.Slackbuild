@@ -1,0 +1,13 @@
+diff -N -r -U 3 highlight-3.1-orig/src/gui-qt/highlight.pro highlight-3.1/src/gui-qt/highlight.pro
+--- highlight-3.1-orig/src/gui-qt/highlight.pro	2010-07-29 00:16:48.000000000 +0300
++++ highlight-3.1/src/gui-qt/highlight.pro	2010-08-25 21:50:13.000000000 +0300
+@@ -3,8 +3,7 @@
+ # -------------------------------------------------
+ TARGET = highlight-gui
+ TEMPLATE = app
+-INCLUDEPATH += . \
+-    ../include
++INCLUDEPATH += ../include /usr/include/lua5.1
+ win32:CONFIG += static
+ CONFIG += precompile_header
+ PRECOMPILED_HEADER = precomp.h
