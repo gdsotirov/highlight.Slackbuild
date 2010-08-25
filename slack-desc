@@ -7,5 +7,6 @@ highlight: 140 programming languages, and includes 40 highlighting color
 highlight: themes.  It's possible to easily enhance the parsing database.
 highlight: The converter includes some features to provide a consistent
 highlight: layout of the output code.
+highlight: This package includes also the QT GUI.
 highlight:
 highlight: Packaged by Georgi D. Sotirov <gdsotirov@dir.bg>
