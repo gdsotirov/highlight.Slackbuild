@@ -1,6 +1,6 @@
-diff -urNad highlight-3.5-orig/src/gui-qt/highlight.pro highlight-3.5/src/gui-qt/highlight.pro
---- highlight-3.5-orig/src/gui-qt/highlight.pro	2011-06-03 22:31:18.000000000 +0300
-+++ highlight-3.5/src/gui-qt/highlight.pro	2011-06-05 18:09:25.000000000 +0300
+diff -urNad highlight-3.6-orig/src/gui-qt/highlight.pro highlight-3.6/src/gui-qt/highlight.pro
+--- highlight-3.6-orig/src/gui-qt/highlight.pro	2011-09-01 22:37:35.000000000 +0300
++++ highlight-3.6/src/gui-qt/highlight.pro	2011-10-12 21:58:13.000000000 +0300
 @@ -3,8 +3,7 @@
  # -------------------------------------------------
  TARGET = highlight-gui
