@@ -1,0 +1,163 @@
+# Slackware build script for highlight
+# Copyright (C) 2012 Georgi D. Sotirov <gdsotirov@dir.bg>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#
+# Visit SlackPack at http://sotirov-bg.net/slackpack/
+#
+# $Id: highlight-3.8.diff,v 1.1 2012/03/06 18:20:50 gsotirov Exp $
+#
+
+# Change 1: Macro LUA_GLOBALSINDEX doesn't exist anymore
+diff -urNad highlight-3.8-orig/src/core/Diluculum/LuaState.cpp highlight-3.8/src/core/Diluculum/LuaState.cpp
+--- highlight-3.8-orig/src/core/Diluculum/LuaState.cpp	2010-07-29 00:16:48.000000000 +0300
++++ highlight-3.8/src/core/Diluculum/LuaState.cpp	2012-03-06 19:25:16.000000000 +0200
+@@ -127,7 +127,9 @@
+       LuaValueMap ret;
+ 
+       lua_pushnil (state_);
+-      while (lua_next (state_, LUA_GLOBALSINDEX) != 0)
++      lua_pushglobaltable (state_);
++
++      while (lua_next (state_, -1) != 0)
+       {
+          // Exclude from the results the tables that would result in infinite
+          // recursion
+@@ -144,6 +146,7 @@
+ 
+          ret[ToLuaValue (state_, -2)] = ToLuaValue (state_, -1);
+ 
++         lua_remove(state_, -2);
+          lua_pop (state_, 1);
+       }
+ 
+diff -urNad highlight-3.8-orig/src/core/Diluculum/LuaVariable.cpp highlight-3.8/src/core/Diluculum/LuaVariable.cpp
+--- highlight-3.8-orig/src/core/Diluculum/LuaVariable.cpp	2010-07-29 00:16:48.000000000 +0300
++++ highlight-3.8/src/core/Diluculum/LuaVariable.cpp	2012-03-06 19:28:58.000000000 +0200
+@@ -152,7 +152,9 @@
+    {
+       // Push the globals table onto the stack
+       lua_pushstring (state_, "_G");
+-      lua_gettable (state_, LUA_GLOBALSINDEX);
++      lua_pushglobaltable (state_);
++      lua_gettable (state_, -1);
++      lua_remove (state_, -2);
+ 
+       // Reach the "final" table (and leave it at the stack top)
+       typedef KeyList::const_iterator iter_t;
+@@ -179,21 +181,17 @@
+    {
+       assert (keys_.size() > 0 && "There should be at least one key here.");
+ 
+-      int index = LUA_GLOBALSINDEX;
+-
+       typedef std::vector<LuaValue>::const_iterator iter_t;
+       for (iter_t p = keys_.begin(); p != keys_.end(); ++p)
+       {
+          PushLuaValue (state_, *p);
+-         lua_gettable (state_, index);
++	 lua_pushglobaltable (state_);
++         lua_gettable (state_, -1);
+ 
+          if (keys_.size() > 1 && p != keys_.end()-1 && !lua_istable(state_, -1))
+             throw TypeMismatchError ("table", p->typeName());
+ 
+-         if (index != LUA_GLOBALSINDEX)
+-            lua_remove (state_, -2);
+-         else
+-            index = -2;
++         lua_remove (state_, -2);
+       }
+    }
+ 
+# Change 2: Function lua_objlen is now called lua_rawlen
+diff -urNad highlight-3.8-orig/src/core/Diluculum/LuaUtils.cpp highlight-3.8/src/core/Diluculum/LuaUtils.cpp
+--- highlight-3.8-orig/src/core/Diluculum/LuaUtils.cpp	2010-08-16 16:47:09.000000000 +0300
++++ highlight-3.8/src/core/Diluculum/LuaUtils.cpp	2012-03-06 20:06:08.000000000 +0200
+@@ -50,12 +50,12 @@
+ 
+          case LUA_TSTRING:
+             return std::string(lua_tostring (state, index),
+-                               lua_objlen(state, index));
++                               lua_rawlen(state, index));
+ 
+          case LUA_TUSERDATA:
+          {
+             void* addr = lua_touserdata (state, index);
+-            size_t size = lua_objlen (state, index);
++            size_t size = lua_rawlen (state, index);
+             LuaUserData ud (size);
+             memcpy (ud.getData(), addr, size);
+             return ud;
+@@ -175,7 +175,8 @@
+                LuaFunction* pf = const_cast<LuaFunction*>(&f); // yikes!
+                pf->setReaderFlag (false);
+                int status = lua_load (state, Impl::LuaFunctionReader, pf,
+-                                      "Diluculum Lua chunk");
++                                      "Diluculum Lua chunk",
++				      "bt"); /* both binary and text chunks (the default) */
+                Impl::ThrowOnLuaError (state, status);
+             }
+             break;
+
+# Change 3: Macro lua_number2integer removed, but we could still call lua_Integer
+diff -urNad highlight-3.8-orig/src/core/Diluculum/LuaValue.cpp highlight-3.8/src/core/Diluculum/LuaValue.cpp
+--- highlight-3.8-orig/src/core/Diluculum/LuaValue.cpp	2010-07-29 00:16:48.000000000 +0300
++++ highlight-3.8/src/core/Diluculum/LuaValue.cpp	2012-03-06 19:53:03.000000000 +0200
+@@ -297,7 +297,7 @@
+       {
+          lua_Number num = (*reinterpret_cast<const lua_Number*>(&data_));
+          lua_Integer res;
+-         lua_number2integer (res, num);
++         res = lua_Integer (num);
+          return res;
+       }
+       else
+
+# Add lua include path for the GUI
+diff -urNad highlight-3.8-orig/src/gui-qt/highlight.pro highlight-3.8/src/gui-qt/highlight.pro
+--- highlight-3.8-orig/src/gui-qt/highlight.pro	2011-09-01 22:37:35.000000000 +0300
++++ highlight-3.8/src/gui-qt/highlight.pro	2012-03-06 20:09:22.000000000 +0200
+@@ -3,8 +3,7 @@
+ # -------------------------------------------------
+ TARGET = highlight-gui
+ TEMPLATE = app
+-INCLUDEPATH += . \
+-    ../include
++INCLUDEPATH += ../include /usr/include/lua/5.2
+ win32:CONFIG += static
+ CONFIG += precompile_header
+ PRECOMPILED_HEADER = precomp.h
+
+# Properly detect LUA 5.2 configuration
+diff -urNad highlight-3.8-orig/src/makefile highlight-3.8/src/makefile
+--- highlight-3.8-orig/src/makefile	2011-10-05 23:14:22.000000000 +0300
++++ highlight-3.8/src/makefile	2012-03-06 19:17:01.000000000 +0200
+@@ -33,10 +33,10 @@
+ INCLUDE_DIR=./include/
+ 
+ # Lua paths
+-LUA_CFLAGS=-I/usr/include/lua5.1
+-LUA_LIBS=-llua
+-#LUA_CFLAGS=$(shell pkg-config --cflags lua5.1)
+-#LUA_LIBS=$(shell pkg-config --libs lua5.1)
++#LUA_CFLAGS=-I/usr/include/lua5.1
++#LUA_LIBS=-llua
++LUA_CFLAGS=$(shell pkg-config --cflags lua-5.2)
++LUA_LIBS=$(shell pkg-config --libs lua-5.2)
+ 
+ 
+ # Third-Party software paths
+
