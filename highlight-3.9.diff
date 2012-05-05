@@ -1,4 +1,4 @@
-# Slackware build script for highlight
+# Patch for highlight
 # Copyright (C) 2012 Georgi D. Sotirov <gdsotirov@dir.bg>
 #
 # This program is free software; you can redistribute it and/or
@@ -17,13 +17,13 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: highlight-3.8.diff,v 1.2 2012/03/08 18:30:34 gsotirov Exp $
+# $Id: highlight-3.9.diff,v 1.1 2012/05/05 14:03:16 gsotirov Exp $
 #
 
 # Add lua include path for the GUI
-diff -urNad highlight-3.8-orig/src/gui-qt/highlight.pro highlight-3.8/src/gui-qt/highlight.pro
---- highlight-3.8-orig/src/gui-qt/highlight.pro	2011-09-01 22:37:35.000000000 +0300
-+++ highlight-3.8/src/gui-qt/highlight.pro	2012-03-06 20:09:22.000000000 +0200
+diff -urNad highlight-3.9-orig/src/gui-qt/highlight.pro highlight-3.9/src/gui-qt/highlight.pro
+--- highlight-3.9-orig/src/gui-qt/highlight.pro	2011-09-01 22:37:35.000000000 +0300
++++ highlight-3.9/src/gui-qt/highlight.pro	2012-05-05 16:48:47.000000000 +0300
 @@ -3,8 +3,7 @@
  # -------------------------------------------------
  TARGET = highlight-gui
@@ -36,9 +36,9 @@ diff -urNad highlight-3.8-orig/src/gui-qt/highlight.pro highlight-3.8/src/gui-qt
  PRECOMPILED_HEADER = precomp.h
 
 # Properly detect LUA 5.1 configuration
-diff -urNad highlight-3.8-orig/src/makefile highlight-3.8/src/makefile
---- highlight-3.8-orig/src/makefile	2011-10-05 23:14:22.000000000 +0300
-+++ highlight-3.8/src/makefile	2012-03-06 19:17:01.000000000 +0200
+diff -urNad highlight-3.9-orig/src/makefile highlight-3.9/src/makefile
+--- highlight-3.9-orig/src/makefile	2011-10-05 23:14:22.000000000 +0300
++++ highlight-3.9/src/makefile	2012-05-05 16:48:47.000000000 +0300
 @@ -33,10 +33,10 @@
  INCLUDE_DIR=./include/
  
@@ -54,4 +54,3 @@ diff -urNad highlight-3.8-orig/src/makefile highlight-3.8/src/makefile
  
  
  # Third-Party software paths
-
