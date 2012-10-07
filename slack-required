@@ -1,4 +1,4 @@
-cxxlibs >= 6.0.14 | gcc-g++ >= 4.5.2
-aaa_elflibs >= 13.37 | gcc >= 4.5.2
-glibc >= 2.13
+cxxlibs >= 6.0.17 | gcc-g++ >= 4.7.1
+aaa_elflibs >= 14.0 | gcc >= 4.7.1
+glibc >= 2.15
 lua >= 5.1.4
