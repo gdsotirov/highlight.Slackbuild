@@ -1,0 +1,46 @@
+# Fix LUA detection through pkg-config and adjust linker flags
+diff -urNad highlight-3.13-orig/examples/swig/makefile highlight-3.13/examples/swig/makefile
+--- highlight-3.13-orig/examples/swig/makefile	2012-10-05 01:57:46.000000000 +0300
++++ highlight-3.13/examples/swig/makefile	2013-02-16 17:38:33.000000000 +0200
+@@ -5,8 +5,8 @@
+ HL_INC=../../src/include/
+ HL_SRC=../../src/
+ 
+-LUA_CFLAGS=$(shell pkg-config --cflags lua)
+-LUA_LIBS=$(shell pkg-config --libs lua)
++LUA_CFLAGS=$(shell pkg-config --cflags lua-5.1)
++LUA_LIBS=$(shell pkg-config --libs lua-5.1)
+ PYTHON_CFLAGS=$(shell pkg-config --cflags python-2.7)
+ PERL_INC=$(shell perl -MExtUtils::Embed -eccopts)
+ 
+diff -urNad highlight-3.13-orig/src/gui-qt/highlight.pro highlight-3.13/src/gui-qt/highlight.pro
+--- highlight-3.13-orig/src/gui-qt/highlight.pro	2013-01-19 00:43:59.000000000 +0200
++++ highlight-3.13/src/gui-qt/highlight.pro	2013-02-16 17:37:59.000000000 +0200
+@@ -31,9 +31,9 @@
+ 
+ # If Lua 5.2 is not default on your system yet you have to omit 5.1 here:
+ unix {
+-    LIBS += -llua5.1
++    LIBS += -llua
+     CONFIG += link_pkgconfig
+-    PKGCONFIG += lua5.1
++    PKGCONFIG += lua
+ }
+ 
+ win32:QMAKE_POST_LINK = f:/upx/upx.exe --best ../../highlight-gui.exe
+diff -urNad highlight-3.13-orig/src/makefile highlight-3.13/src/makefile
+--- highlight-3.13-orig/src/makefile	2013-02-01 22:37:56.000000000 +0200
++++ highlight-3.13/src/makefile	2013-02-16 17:37:07.000000000 +0200
+@@ -34,10 +34,10 @@
+ 
+ 
+ # If Lua 5.2 is not default on your system yet you have to omit 5.1:
+-LUA_CFLAGS=$(shell pkg-config --cflags lua5.1)
++LUA_CFLAGS=$(shell pkg-config --cflags lua-5.1)
+ 
+ # default lua lib
+-LUA_LIBS=$(shell pkg-config --libs lua5.1)
++LUA_LIBS=$(shell pkg-config --libs lua-5.1)
+ # luajit lib
+ #LUA_LIBS=$(shell pkg-config --libs luajit)
+ 
