@@ -1,0 +1,12 @@
+diff -urNad highlight-3.24-orig/src/makefile highlight-3.24/src/makefile
+--- highlight-3.24-orig/src/makefile	2015-10-21 23:14:33.000000000 +0300
++++ highlight-3.24/src/makefile	2016-10-16 16:33:23.000000000 +0300
+@@ -15,7 +15,7 @@
+ CXX=c++
+ 
+ # Added -qt4 because of Arch Linux Qt5 migration
+-QMAKE=qmake-qt4
++QMAKE=qmake
+ 
+ CFLAGS:=-Wall -O2 ${CFLAGS} -DNDEBUG
+ #CFLAGS:=-ggdb ${CFLAGS}
