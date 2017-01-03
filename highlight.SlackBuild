@@ -19,13 +19,13 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: highlight.SlackBuild,v 1.42 2016/11/03 09:36:49 gsotirov Exp $
+# $Id: highlight.SlackBuild,v 1.43 2017/01/03 17:12:30 gsotirov Exp $
 #
 
 . ../../slack-package.conf
 
 NAME=highlight
-VERSION=3.33
+VERSION=3.34
 ARCH=${ARCH:-i586}
 BUILD=${BUILD:-1}
 
