@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Slackware build script for highlight
-# Copyright (C) 2008-2017 Georgi D. Sotirov <gdsotirov@dir.bg>
+# Copyright (C) 2008-2018 Georgi D. Sotirov <gdsotirov@dir.bg>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,13 +19,13 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: highlight.SlackBuild,v 1.50 2017/12/06 17:41:24 gsotirov Exp $
+# $Id: highlight.SlackBuild,v 1.51 2018/01/26 06:19:20 gsotirov Exp $
 #
 
 . ../../slack-package.conf
 
 NAME=highlight
-VERSION=3.41
+VERSION=3.42
 ARCH=${ARCH:-i586}
 BUILD=${BUILD:-1}
 
