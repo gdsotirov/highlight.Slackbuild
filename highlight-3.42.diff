@@ -1,0 +1,14 @@
+# Remove tabBarAutoHide property, which was introduced in Qt 5.4 (see http://doc.qt.io/qt-5/qtabwidget.html#tabBarAutoHide-prop )
+diff -urNad highlight-3.42-orig/src/gui-qt/mainwindow.ui highlight-3.42/src/gui-qt/mainwindow.ui
+--- highlight-3.42-orig/src/gui-qt/mainwindow.ui	2018-01-20 22:42:17.000000000 +0200
++++ highlight-3.42/src/gui-qt/mainwindow.ui	2018-01-26 08:46:19.337768260 +0200
+@@ -165,9 +165,6 @@
+        <property name="movable">
+         <bool>false</bool>
+        </property>
+-       <property name="tabBarAutoHide">
+-        <bool>false</bool>
+-       </property>
+        <widget class="QWidget" name="tab_file_io">
+         <attribute name="icon">
+          <iconset resource="highlight-gui.qrc">
