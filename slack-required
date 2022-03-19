@@ -1,4 +1,4 @@
-gcc >= 5.3.0
-gcc-g++ >= 5.3.0
-glibc-solibs >= 2.23
-lua >= 5.2.4
+aaa_glibc-solibs >= 2.33
+gcc >= 11.2.0
+gcc-g++ >= 11.2.0
+lua >= 5.4.4
