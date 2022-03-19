@@ -63,8 +63,10 @@ if [ -e $CWD/${NAME}-${VERSION}.diff ]; then
 fi
 
 # Build & install
-CFLAGS="-DHL_DATA_DIR=\\\"\${HL_DATA_DIR}\\\" -Wall ${SLKCFLAGS} -DNDEBUG" \
-make --jobs 8 all gui lib-shared || exit 5
+CFLAGS="-DHL_DATA_DIR=\\\"\${HL_DATA_DIR}\\\" -Wall ${SLKCFLAGS} -DNDEBUG"
+make CFLAGS="${CFLAGS}" --jobs 8 all gui || exit 5
+make clean-obj || exit 51
+make CFLAGS="${CFLAGS} -fPIC" --jobs 8 lib-shared || exit 52
 make DESTDIR=$PKG \
      PREFIX=/usr \
      man_dir=/usr/man/man1 \
