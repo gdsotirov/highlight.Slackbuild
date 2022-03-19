@@ -23,7 +23,10 @@
 . ../../slack-package.conf
 
 NAME=highlight
-VERSION=3.44
+VERSION=4.1
+VER_LIB_MAJ=4
+VER_LIB_MIN=0
+VER_LIB="${VER_LIB_MAJ}.${VER_LIB_MIN}"
 ARCH=${ARCH:-i586}
 BUILD=${BUILD:-1}
 
@@ -60,20 +63,25 @@ if [ -e $CWD/${NAME}-${VERSION}.diff ]; then
 fi
 
 # Build & install
-make CFLAGS="-DHL_DATA_DIR=\\\"\${HL_DATA_DIR}\\\" -Wall ${SLKCFLAGS} -DNDEBUG -std=c++11" -j4 all || exit 5
-make CFLAGS="-DHL_DATA_DIR=\\\"\${HL_DATA_DIR}\\\" -Wall ${SLKCFLAGS} -DNDEBUG -std=c++11" -j4 gui || exit 5
+CFLAGS="-DHL_DATA_DIR=\\\"\${HL_DATA_DIR}\\\" -Wall ${SLKCFLAGS} -DNDEBUG" \
+make --jobs 8 all gui lib-shared || exit 5
 make DESTDIR=$PKG \
+     PREFIX=/usr \
      man_dir=/usr/man/man1 \
      doc_dir=/usr/doc/${NAME}-${VERSION}/ \
-     install || exit 6
-make DESTDIR=$PKG \
-     man_dir=/usr/man/man1 \
-     doc_dir=/usr/doc/${NAME}-${VERSION}/ \
-     install-gui || exit 6
+     install install-gui || exit 6
+# Manually install shared library
+install --mode 755 --directory $PKG/usr/lib${LIBDIRSUFFIX}
+install --mode 755 --preserve-timestamps \
+        $SRC/src/lib${NAME}.so.${VER_LIB} \
+	$PKG/usr/lib${LIBDIRSUFFIX}/lib${NAME}.so.${VER_LIB}
+( cd $PKG/usr/lib${LIBDIRSUFFIX}
+  ln --symbolic lib${NAME}.so.${VER_LIB} lib${NAME}.so.${VER_LIB_MAJ}
+  ln --symbolic lib${NAME}.so.${VER_LIB} lib${NAME}.so)
 
 # Prepare
 bin_perms $PKG
-( cd $PKG; strip_bin )
+( cd $PKG; strip_bin; strip_lib )
 create_docs $PKG ${NAME}-${VERSION}
 #gzip_man $PKG
 
