@@ -40,7 +40,7 @@ fi
 
 SRC=$TMP/${NAME}-${VERSION}
 if [ -e $SRC -a -d $SRC ]; then
-  echo "Source directory '$SRC' already exists! Plaese, move it or remove it."
+  echo "Source directory '$SRC' already exists! Please, move it or remove it."
   exit 1
 fi
 
@@ -63,7 +63,7 @@ if [ -e $CWD/${NAME}-${VERSION}.diff ]; then
 fi
 
 # Build & install
-CFLAGS="-DHL_DATA_DIR=\\\"\${HL_DATA_DIR}\\\" -Wall ${SLKCFLAGS} -DNDEBUG"
+CFLAGS="-Wall ${SLKCFLAGS} -DNDEBUG -std=c++11 -D_FILE_OFFSET_BITS=64"
 make CFLAGS="${CFLAGS}" --jobs 8 all gui || exit 5
 make clean-obj || exit 51
 make CFLAGS="${CFLAGS} -fPIC" --jobs 8 lib-shared || exit 52
