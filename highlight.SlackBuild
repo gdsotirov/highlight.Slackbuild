@@ -23,7 +23,7 @@
 . ../../slack-package.conf
 
 NAME=highlight
-VERSION=4.3
+VERSION=4.4
 VER_LIB_MAJ=4
 VER_LIB_MIN=0
 VER_LIB="${VER_LIB_MAJ}.${VER_LIB_MIN}"
