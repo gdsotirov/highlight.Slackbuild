@@ -64,7 +64,18 @@ fi
 
 # Build & install
 CFLAGS="-Wall ${SLKCFLAGS} -DNDEBUG -std=c++11 -D_FILE_OFFSET_BITS=64"
-make CFLAGS="${CFLAGS}" --jobs 8 all gui || exit 5
+# For some reason qmake injects -L/usr/lib64 in LFLAGS, which breaks
+# linking of highlight-gui, so patch the file before running make
+if [ "${ARCH}" == "x86_64" ]; then
+  make CFLAGS="${CFLAGS}" --jobs 8 all || exit 5
+  cd src/gui-qt
+  qmake 'DEFINES+=DATA_DIR=\\\""/usr/share/highlight/"\\\" CONFIG_DIR=\\\""/etc/highlight/"\\\" DOC_DIR=\\\""/usr/share/doc/highlight/"\\\"'
+  sed --in-place 's/ \-L\/usr\/lib64//' Makefile
+  make CFLAGS="${CFLAGS}" --jobs 8 || exit 55
+  cd ../..
+else
+  make CFLAGS="${CFLAGS}" --jobs 8 all gui || exit 5
+fi
 make clean-obj || exit 51
 make CFLAGS="${CFLAGS} -fPIC" --jobs 8 lib-shared || exit 52
 make DESTDIR=$PKG \
