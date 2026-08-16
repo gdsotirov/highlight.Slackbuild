@@ -83,11 +83,8 @@ make DESTDIR=$PKG \
      man_dir=/usr/man/man1 \
      doc_dir=/usr/doc/${NAME}-${VERSION}/ \
      install install-gui || exit 6
-# Manually install shared library
-install --mode 755 --directory $PKG/usr/lib${LIBDIRSUFFIX}
-install --mode 755 --preserve-timestamps \
-        $SRC/src/lib${NAME}.so.${VER_LIB} \
-	$PKG/usr/lib${LIBDIRSUFFIX}/lib${NAME}.so.${VER_LIB}
+make DESTDIR=$PKG install-lib-shared || exit 61
+# Manually adjust sym links to shared library
 ( cd $PKG/usr/lib${LIBDIRSUFFIX}
   ln --symbolic lib${NAME}.so.${VER_LIB} lib${NAME}.so.${VER_LIB_MAJ}
   ln --symbolic lib${NAME}.so.${VER_LIB} lib${NAME}.so)

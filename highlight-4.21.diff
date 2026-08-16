@@ -1,0 +1,28 @@
+# See https://gitlab.com/saalen/highlight/-/merge_requests/169
+diff -urNad highlight-v4.21-orig/makefile highlight-v4.21/makefile
+--- highlight-v4.21-orig/makefile	2026-08-14 18:50:52.000000000 +0300
++++ highlight-v4.21/makefile	2026-08-16 11:55:45.633000000 +0300
+@@ -170,6 +170,7 @@
+ 	${INSTALL_PROGRAM} ./src/highlight-gui ${DESTDIR}${bin_dir}
+ 
+ install-lib-shared:
++	${MKDIR} ${DESTDIR}${lib_dir} 
+ 	${INSTALL_DATA} ./src/libhighlight.so.4.0 ${DESTDIR}${lib_dir}
+ 
+ uninstall:
+diff -urNad highlight-v4.21-orig/src/makefile highlight-v4.21/src/makefile
+--- highlight-v4.21-orig/src/makefile	2026-08-14 18:50:52.000000000 +0300
++++ highlight-v4.21/src/makefile	2026-08-16 11:54:56.330000000 +0300
+@@ -75,8 +75,10 @@
+ libhighlight.a: $(ALL_LIB_OBJS)
+ 	$(AR) -crs $@ $^
+ 
+-lib-shared libhighlight.so.$(SO_VERSION): CFLAGS += -fPIC
+-lib-shared libhighlight.so.$(SO_VERSION): $(ALL_LIB_OBJS)
++lib-shared: libhighlight.so.$(SO_VERSION)
++
++libhighlight.so.$(SO_VERSION): CFLAGS += -fPIC
++libhighlight.so.$(SO_VERSION): $(ALL_LIB_OBJS)
+ 	$(CXX) -shared -Wl,-soname,libhighlight.so.$(SO_VERSION) -o $@ -lc $^
+ 
+ gui-qt: libhighlight.a
